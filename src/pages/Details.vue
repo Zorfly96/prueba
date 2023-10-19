@@ -176,7 +176,7 @@
             <div v-if="showPingChartBox" class="shadow-box big-padding text-center ping-chart-wrapper">
                 <div class="row">
                     <div class="col">
-                        <PingChart :monitor-id="monitor.id" />
+                        <PingChart :monitor-id="monitor.id" :use12HourTimeFormat="use12HourTimeFormat" />
                     </div>
                 </div>
             </div>
@@ -219,7 +219,7 @@
                     <tbody>
                         <tr v-for="(beat, index) in displayedRecords" :key="index" style="padding: 10px;">
                             <td><Status :status="beat.status" /></td>
-                            <td :class="{ 'border-0':! beat.msg}"><Datetime :value="beat.time" /></td>
+                            <td :class="{ 'border-0':! beat.msg}"><Datetime :value="beat.time" :use12HourTimeFormat="use12HourTimeFormat" /></td>
                             <td class="border-0">{{ beat.msg }}</td>
                         </tr>
 
@@ -317,6 +317,7 @@ export default {
                 currentExample: "javascript-fetch",
                 code: "",
             },
+            use12HourTimeFormat: false,
         };
     },
     computed: {
@@ -410,6 +411,10 @@ export default {
         "pushMonitor.currentExample"() {
             this.loadPushExample();
         },
+    },
+
+    created() {
+        this.loadSettings();
     },
 
     mounted() {
@@ -640,7 +645,14 @@ export default {
                     .replace("https://example.com/api/push/key?status=up&msg=OK&ping=", this.pushURL);
                 this.pushMonitor.code = code;
             });
+        },
+
+        loadSettings() {
+            this.$root.getSocket().emit("getSettings", res => {
+                this.use12HourTimeFormat = res.data.use12HourTimeFormat || false;
+            });
         }
+
     },
 };
 </script>

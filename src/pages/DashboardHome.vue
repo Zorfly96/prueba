@@ -44,7 +44,7 @@
                         <tr v-for="(beat, index) in displayedRecords" :key="index" :class="{ 'shadow-box': $root.windowWidth <= 550}">
                             <td><router-link :to="`/dashboard/${beat.monitorID}`">{{ $root.monitorList[beat.monitorID]?.name }}</router-link></td>
                             <td><Status :status="beat.status" /></td>
-                            <td :class="{ 'border-0':! beat.msg}"><Datetime :value="beat.time" /></td>
+                            <td :class="{ 'border-0':! beat.msg}"><Datetime :value="beat.time" :use12HourTimeFormat="use12HourTimeFormat" /></td>
                             <td class="border-0">{{ beat.msg }}</td>
                         </tr>
 
@@ -98,6 +98,7 @@ export default {
             },
             importantHeartBeatListLength: 0,
             displayedRecords: [],
+            use12HourTimeFormat: false
         };
     },
     watch: {
@@ -110,6 +111,10 @@ export default {
         page() {
             this.getImportantHeartbeatListPaged();
         },
+    },
+
+    created() {
+        this.loadSettings();
     },
 
     mounted() {
@@ -188,6 +193,16 @@ export default {
             }
 
         },
+
+        /**
+         * Retrieves important settings values.
+         * @returns {void}
+         */
+        loadSettings() {
+            this.$root.getSocket().emit("getSettings", res => {
+                this.use12HourTimeFormat = res.data.use12HourTimeFormat;
+            });
+        }
     },
 };
 </script>

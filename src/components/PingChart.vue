@@ -33,6 +33,10 @@ export default {
             type: Number,
             required: true,
         },
+        use12HourTimeFormat: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {
@@ -57,6 +61,13 @@ export default {
     },
     computed: {
         chartOptions() {
+            const hourTimeFormat = this.use12HourTimeFormat ? "hh" : "HH";
+            const minuteTimeFormat = `${hourTimeFormat}:mm${
+                this.use12HourTimeFormat ? " A" : ""
+            }`;
+            const tooltipFormat = `YYYY-MM-DD ${hourTimeFormat}:mm:ss${
+                this.use12HourTimeFormat ? " A" : ""
+            }`;
             return {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -94,10 +105,10 @@ export default {
                         time: {
                             minUnit: "minute",
                             round: "second",
-                            tooltipFormat: "YYYY-MM-DD HH:mm:ss",
+                            tooltipFormat,
                             displayFormats: {
-                                minute: "HH:mm",
-                                hour: "MM-DD HH:mm",
+                                minute: minuteTimeFormat,
+                                hour: `MM-DD ${minuteTimeFormat}`,
                             }
                         },
                         ticks: {
