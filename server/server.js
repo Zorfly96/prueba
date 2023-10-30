@@ -780,6 +780,7 @@ let needSetup = false;
                     bean.port = null;
                 }
 
+                bean.ipFamily = monitor.ipFamily;
                 bean.keyword = monitor.keyword;
                 bean.invertKeyword = monitor.invertKeyword;
                 bean.ignoreTls = monitor.ignoreTls;
