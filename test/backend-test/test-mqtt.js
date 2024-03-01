@@ -44,11 +44,11 @@ function testMqtt(mqttSuccessMessage, mqttCheckType, receivedMessage, onSuccess,
             status: PENDING,
         };
         mqttMonitorType.check(monitor, heartbeat, {})
-            .then(()=>{
+            .then(() => {
                 testMqttClient.end();
                 hiveMQContainer.stop();
             })
-            .then(() => onSuccess(heartbeat), onError)
+            .then(() => onSuccess(heartbeat), onError);
 
         const testMqttClient = mqtt.connect(hiveMQContainer.getConnectionString());
         testMqttClient.on("connect", () => {
